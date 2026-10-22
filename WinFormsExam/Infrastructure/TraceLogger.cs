@@ -26,6 +26,12 @@ public sealed class TraceLogger : IDisposable
         Trace.WriteLine($"{DateTime.Now:O} Delivery completed: Id={delivery.Id}");
         listener.Flush();
     }
+    // in case of processing failure, logs the delivery id and the exception details
+    public void ProcessingFailed(int deliveryId, Exception exception)
+    {
+        Trace.WriteLine($"{DateTime.Now:O} Delivery processing failed: Id={deliveryId}, Error={exception}");
+        listener.Flush();
+    }
 
     // Logs the start of the delivery processing
     public void Dispose()

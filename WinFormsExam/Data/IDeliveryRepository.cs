@@ -9,4 +9,8 @@ public interface IDeliveryRepository
     IReadOnlyList<Delivery> LoadAll();
 
     void UpdateStatus(int id, DeliveryStatus status);
+
+    void ResetProcessingDeliveries();
+
+    void ResetProcessingDelivery(int id);
 }

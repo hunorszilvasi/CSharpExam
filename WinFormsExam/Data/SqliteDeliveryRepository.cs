@@ -89,6 +89,32 @@ public sealed class SqliteDeliveryRepository : IDeliveryRepository
         }
     }
 
+    // Resets the status of all deliveries in case of an application crash
+    public void ResetProcessingDeliveries()
+    {
+        using var connection = OpenConnection();
+        using var command = connection.CreateCommand();
+        command.CommandText = """
+            UPDATE Deliveries
+            SET Status = 'Pending'
+            WHERE Status = 'Processing';
+            """;
+        command.ExecuteNonQuery();
+    }
+    // Resets the status of a specific delivery in case of an application crash
+    public void ResetProcessingDelivery(int id)
+    {
+        using var connection = OpenConnection();
+        using var command = connection.CreateCommand();
+        command.CommandText = """
+            UPDATE Deliveries
+            SET Status = 'Pending'
+            WHERE Id = $id AND Status = 'Processing';
+            """;
+        command.Parameters.AddWithValue("$id", id);
+        command.ExecuteNonQuery();
+    }
+
     private void InitializeDatabase()
     {
         using var connection = OpenConnection();
